@@ -9,11 +9,14 @@ const Child = ({ data }: { data: Data }) => {
     return <div>I'm a child! {data.some}</div>;
 };
 
+const ChildMemo = React.memo(Child);
+
 const Parent = ({ children }: { children: (data: Data) => ReactNode }) => {
     const [counter, setCounter] = useState(1);
 
     // assume it's coming from REST or GraphQL endpoint here
-    const data = { some: "data" };
+    // const data = { some: "data" };
+    const data = useMemo(() => {return { some: "data" }}, [])
 
     return (
         <>
@@ -28,7 +31,8 @@ const Parent = ({ children }: { children: (data: Data) => ReactNode }) => {
 const ParentMemo = React.memo(Parent);
 
 export default function Ej3() {
-      const memoChild = useMemo(() => (data: Data) => <Child data={data} />, []);
+    //   const memoChild = useMemo(() => (data: Data) => <Child data={data} />, []);
+      const memoChild = useMemo(() => (data: Data) => <ChildMemo data={data} />, []);
 
     return <ParentMemo>{memoChild}</ParentMemo>;
 }
